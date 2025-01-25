@@ -7,9 +7,10 @@ import openpyxl
 from urllib.parse import quote
 import webbrowser
 from time import sleep
+import pyautogui
 
 webbrowser.open('https://web.whatsapp.com/')
-sleep(30)
+sleep(60)
 
 
 #ler planilha e guardar informações sobre, nome, telefone e vencimento
@@ -27,14 +28,21 @@ for linha in pagina_clientes.iter_rows(min_row=2):
     
     #Criar links personalizados do whats e enviar mensagens para cada cliente
     # https://web.whatsapp.com/send?phone=5555555&text="aaaaaaaaaa"
-    link_mensagem_whatsapp = f'https://web.whatsapp.com/send?phone={telefone}&text={quote(mensagem)}'  
-    webbrowser.open(link_mensagem_whatsapp)
     
-    input('')
-    
-
-
-
+    try:
+        link_mensagem_whatsapp = f'https://web.whatsapp.com/send?phone={telefone}&text={quote(mensagem)}'  
+        webbrowser.open(link_mensagem_whatsapp)
+        sleep(30)
+        seta = pyautogui.locateCenterOnScreen('seta.png')
+        sleep(10)
+        pyautogui.click(seta[0],seta[1])
+        sleep(10)
+        pyautogui.hotkey('ctrl','w')
+        sleep(10)
+    except:
+        print(f'Não deu certo no contato {nome}')
+        with open('erros.csv','a',newline='', encoding='utf-8') as arquivo:
+            arquivo.write(f'{nome},{telefone}')
 
 
 
